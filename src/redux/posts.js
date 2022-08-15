@@ -7,7 +7,7 @@ import { apiCallBegan } from './apiActions'
 // error = string | null
 
 const initialState = {
-  posts: [],
+  list: [],
   status: RequestStatus.Idle,
   error: null,
 }
@@ -17,18 +17,17 @@ const slice = createSlice({
   initialState,
   reducers: {
     postRequested: (state) => {
-      state.error = ''
       state.status = RequestStatus.Loading
     },
     postsReceived: (state, action) => {
       state.status = RequestStatus.Succeeded
       const loadedPosts = action.payload
-      state.posts = state.posts.concat(loadedPosts)
+      state.list = state.list.concat(loadedPosts)
     },
     postCreated: (state, action) => {
-      const newPost = { ...action.payload, id: state.posts.length + 1 }
+      const newPost = { ...action.payload, id: state.list.length + 1 }
       state.status = RequestStatus.Succeeded
-      state.posts = state.posts.concat(newPost)
+      state.list = state.list.concat(newPost)
     },
     postRequestFailed: (state, action) => {
       state.status = RequestStatus.Failed
@@ -43,15 +42,16 @@ export default slice.reducer
 
 // Slices
 export const getPostsError = (state) => state.entities.posts.error
-export const selectAllPosts = (state) => state.entities.posts.posts
+export const selectAllPosts = (state) => state.entities.posts.list
 export const requestPostStatus = (state) => state.entities.posts.status
 export const selectPostById = (state, postId) =>
   state.entities.posts.find((post) => post.id === postId)
 
-// Dispatch actions
+// Dispatch action
+// Action creators
 const url = '/posts'
-export const fetchPosts = () => (dispatch) => {
-  return dispatch(
+export const fetchPosts = () => (dispatch) =>
+  dispatch(
     apiCallBegan({
       url,
       onStart: postRequested.type,
@@ -59,10 +59,9 @@ export const fetchPosts = () => (dispatch) => {
       onError: postRequestFailed.type,
     })
   )
-}
 
-export const createPost = (data) => (dispatch) => {
-  return dispatch(
+export const createPost = (data) => (dispatch) =>
+  dispatch(
     apiCallBegan({
       url,
       method: Request.POST,
@@ -72,6 +71,5 @@ export const createPost = (data) => (dispatch) => {
       onError: postRequestFailed.type,
     })
   )
-}
 
 // Memoization - reselect library

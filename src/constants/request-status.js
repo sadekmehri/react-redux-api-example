@@ -3,5 +3,4 @@ export const RequestStatus = {
   Succeeded: 'succeeded',
   Failed: 'failed',
   Idle: 'idle',
-  Rejected: 'Rejected'
 }
