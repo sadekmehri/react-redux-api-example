@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Request } from '../constants/request'
 import { RequestStatus } from '../constants/request-status'
 import { apiCallBegan } from './apiActions'
-import { Request } from '../constants/request'
 
 // status = 'idle' | 'loading' | 'succeeded' | 'failed'
 // error = string | null
@@ -17,6 +17,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     postRequested: (state) => {
+      state.error = ''
       state.status = RequestStatus.Loading
     },
     postsReceived: (state, action) => {

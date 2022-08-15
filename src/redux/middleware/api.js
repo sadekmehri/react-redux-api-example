@@ -22,10 +22,12 @@ const api =
       dispatch(apiCallSuccess(response.data))
 
       if (onSuccess) dispatch({ type: onSuccess, payload: response.data })
-    } catch (error) {
-      dispatch(apiCallFailed(error.message))
+    } catch (err) {
+      const message = err.response ? err.response.data : err.message
 
-      if (onError) dispatch({ type: onError, payload: error.message })
+      dispatch(apiCallFailed(message))
+
+      if (onError) dispatch({ type: onError, payload: message })
     }
   }
 

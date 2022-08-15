@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RequestStatus } from '../../constants/request-status'
 import {
   createPost,
-  requestPostStatus,
   fetchPosts,
   getPostsError,
+  requestPostStatus,
   selectAllPosts,
 } from '../../redux/posts'
 import Post from './Post'
@@ -22,11 +22,14 @@ const PostsList = () => {
   }, [postStatus, dispatch])
 
   // Display posts
-  const displayPosts = () =>
-    posts.map((post, key) => <Post key={key} post={post} />)
+  const displayPosts = () => {
+    if (posts.length === 0) return <h1>There is no post to display !</h1>
+
+    return posts.map((post, key) => <Post key={key} post={post} />)
+  }
 
   // Create new post. Dispatch a create action
-  const createNewPost = () => {
+  const handleCreateNewPost = () => {
     const post = {
       userId: 1,
       title: 'Sdig was here!',
@@ -46,7 +49,7 @@ const PostsList = () => {
       case RequestStatus.Succeeded:
         content = displayPosts()
         break
-      case RequestStatus.Failed:
+      default:
         content = <div>{error} !</div>
         break
     }
@@ -55,8 +58,8 @@ const PostsList = () => {
 
   return (
     <>
-      <h1>PostsList!</h1>
-      <button onClick={createNewPost}>Add new Post</button>
+      <h1>PostsList Component</h1>
+      <button onClick={handleCreateNewPost}>Add new Post!</button>
       <>{renderUI()}</>
     </>
   )

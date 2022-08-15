@@ -18,5 +18,4 @@ instance.interceptors.response.use(null, (err) => {
   return Promise.reject(err)
 })
 
-
 export default instance
